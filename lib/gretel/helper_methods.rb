@@ -88,20 +88,30 @@ module Gretel
       
       out = []
       while link = links.shift
-        out << get_crumb(link.text, link.url, options[:semantic], nil, link.options)
+        out << get_bootstrap_crumb(link.text, link.url)
       end
       
       if current_link
         if options[:link_last] || options[:link_current]
-          out << get_crumb(current_link.text, current_link.url, options[:semantic], "current", current_link.options)
+          out << get_bootstrap_crumb(current_link.text, current_link.url, options[:semantic], "current", current_link.options)
         else
-          out << get_crumb(current_link.text, nil, options[:semantic], "current")
+          out << get_bootstrap_crumb(current_link.text, nil)
         end
       end
       
       out.join(options[:separator] || " &gt; ").html_safe
     end
     
+    def get_bootstrap_crumb(text, url, options = {})
+      if url.blank?
+        content_tag(:li, text, :class => "active")
+      else
+        content = link_to(text, url, :class => "active")
+        content << content_tag(:span, "/", :class => "devider")
+        content_tag(:li, content)
+      end
+    end
+
     def get_crumb(text, url, semantic, css_class, options = {})
       if url.blank?
         if semantic
