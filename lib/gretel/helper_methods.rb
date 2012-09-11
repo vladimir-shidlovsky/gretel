@@ -98,8 +98,6 @@ module Gretel
           out << get_bootstrap_crumb(current_link.text, nil)
         end
       end
-      
-      out.join(options[:separator] || " &gt; ").html_safe
     end
     
     def get_bootstrap_crumb(text, url, options = {})
