@@ -5,22 +5,27 @@ module Gretel
     end
     
     def self.included(base)
-      base.send :helper_method, :breadcrumbs, :breadcrumb
+      base.send :helper_method, :breadcrumb
     end
     
     def breadcrumb(*args)
       options = args.extract_options!
-      name, object = args[0], args[1]
-      
-      if name
-        @_breadcrumb_name = name
-        @_breadcrumb_object = object
+
+      if args[0].is_a? Symbol or args[0].is_a? String
+        @_breadcrumb_name, @_breadcrumb_object = args[0], args[1]
       else
-        if @_breadcrumb_name
-          crumb = breadcrumb_for(@_breadcrumb_name, @_breadcrumb_object, options)
-        elsif options[:show_root_alone]
-          crumb = breadcrumb_for(:root, options)
+        @_breadcrumb_name, @_breadcrumb_object = args[0].class.to_s.underscore, args[0]
+        if @_breadcrumb_object.try(:new_record?)
+          @_breadcrumb_name = ["new", @_breadcrumb_name.to_s].join('_').to_sym
+        else
+          @_breadcrumb_name = ["edit", @_breadcrumb_name.to_s].join('_').to_sym
         end
+      end
+
+      if @_breadcrumb_name
+        crumb = breadcrumb_for(@_breadcrumb_name, @_breadcrumb_object, options)
+      elsif options[:show_root_alone]
+        crumb = breadcrumb_for(:root, options)
       end
       
       if crumb
@@ -32,7 +37,7 @@ module Gretel
         end
       end
       
-      crumb
+      content_tag :ul, crumb, :class => "breadcrumb"
     end
     
     def breadcrumbs(*args)
@@ -98,14 +103,16 @@ module Gretel
           out << get_bootstrap_crumb(current_link.text, nil)
         end
       end
+      
+      out.join.html_safe
     end
     
     def get_bootstrap_crumb(text, url, options = {})
       if url.blank?
         content_tag(:li, text, :class => "active")
       else
-        content = link_to(text, url, :class => "active")
-        content << content_tag(:span, "/", :class => "devider")
+        content = link_to(text, url)
+        content << content_tag(:span, "/", :class => "divider")
         content_tag(:li, content)
       end
     end
