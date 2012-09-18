@@ -1,5 +1,8 @@
 module Gretel
   class Crumbs
+
+    extend Gretel::ResourceCrumbs
+    
     class << self
       def controller # hack because Rails.application.routes.url_helpers needs a controller method
       end
@@ -51,6 +54,7 @@ module Gretel
 
         @parent = Gretel::Parent.new(name, object)
       end
+
     end
   end
 end

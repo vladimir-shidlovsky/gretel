@@ -117,25 +117,5 @@ module Gretel
       end
     end
 
-    def get_crumb(text, url, semantic, css_class, options = {})
-      if url.blank?
-        if semantic
-          content_tag(:div, content_tag(:span, text, :class => css_class, :itemprop => "title"), :itemscope => "", :itemtype => "http://data-vocabulary.org/Breadcrumb")
-        else
-          if css_class
-            content_tag(:span, text, :class => css_class)
-          else
-            text
-          end
-        end
-      else
-        options.merge! :class => (options[:class] ? options[:class] + " " : "") + css_class if css_class
-        if semantic
-          content_tag(:div, link_to(content_tag(:span, text, :itemprop => "title"), url, options.merge(:itemprop => "url")), :itemscope => "", :itemtype => "http://data-vocabulary.org/Breadcrumb")
-        else
-          link_to(text, url, options)
-        end
-      end
-    end
   end
 end

@@ -1,3 +1,4 @@
+require 'gretel/resource_crumbs'
 require 'gretel/crumb'
 require 'gretel/crumbs'
 require 'gretel/helper_methods'
