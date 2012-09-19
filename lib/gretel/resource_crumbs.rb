@@ -9,7 +9,7 @@ module Gretel
 
     def index_crumb(name)
       crumb(name) do
-        link(I18n.translate(name, :count => 10), send("#{name}_path"))
+        link(model_plural_name(name), send("#{name}_path"))
       end
     end
 
@@ -27,6 +27,10 @@ module Gretel
         link(resource_title(resource), send("#{edit_name}_path", resource))
         parent name
       end 
+    end
+
+    def model_plural_name(name)
+      name.to_s.singularize.classify.safe_constantize.try(:model_name).try(:human).pluralize || name
     end
 
     def resource_name(name)
