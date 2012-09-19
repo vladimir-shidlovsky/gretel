@@ -23,7 +23,7 @@ module Gretel
         all[name] = block
       end
       
-      def get_crumb(name, object = nil)
+      def get_crumb(name, object = nil, options = {})
         crumb = all[name]
         raise ArgumentError, "Breadcrumb :#{name} not found." unless crumb
         

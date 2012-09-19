@@ -14,7 +14,8 @@ module Gretel
       if args[0].is_a? Symbol or args[0].is_a? String
         @_breadcrumb_name, @_breadcrumb_object = args[0], args[1]
       else
-        @_breadcrumb_name, @_breadcrumb_object = args[0].class.to_s.underscore, args[0]
+        @_breadcrumb_name = options[:as] || args[0].class.to_s.underscore
+        @_breadcrumb_object = args[0]
         if @_breadcrumb_object.try(:new_record?)
           @_breadcrumb_name = ["new", @_breadcrumb_name.to_s].join('_').to_sym
         else
