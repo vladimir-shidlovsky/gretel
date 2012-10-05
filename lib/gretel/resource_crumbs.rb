@@ -30,7 +30,7 @@ module Gretel
     end
 
     def model_plural_name(name)
-      name.to_s.singularize.classify.safe_constantize.try(:model_name).try(:human).pluralize || name
+      name.to_s.singularize.classify.safe_constantize.try(:model_name).human(:count => :plural) rescue name
     end
 
     def resource_name(name)
