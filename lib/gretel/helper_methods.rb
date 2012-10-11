@@ -94,12 +94,12 @@ module Gretel
       
       out = []
       while link = links.shift
-        out << get_bootstrap_crumb(link.text, link.url)
+        out << get_bootstrap_crumb(link.text, link.url, link.options)
       end
       
       if current_link
         if options[:link_last] || options[:link_current]
-          out << get_bootstrap_crumb(current_link.text, current_link.url, options[:semantic], "current", current_link.options)
+          out << get_bootstrap_crumb(current_link.text, current_link.url, current_link.options)
         else
           out << get_bootstrap_crumb(current_link.text, nil)
         end
@@ -112,7 +112,7 @@ module Gretel
       if url.blank?
         content_tag(:li, text, :class => "active")
       else
-        content = link_to(text, url)
+        content = link_to(text, url, options)
         content << content_tag(:span, "/", :class => "divider")
         content_tag(:li, content)
       end

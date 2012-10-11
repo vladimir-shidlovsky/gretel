@@ -1,33 +1,33 @@
 module Gretel
   module ResourceCrumbs
 
-    def resource_crumb(name, &block)
-      index_crumb name
-      new_crumb name
-      edit_crumb name
+    def resource_crumb(name, options = {}, &block)
+      index_crumb name, options
+      new_crumb name, options
+      edit_crumb name, options
     end
 
-    def index_crumb(name)
+    def index_crumb(name, options)
       crumb(name) do
         url = send("#{name}_path") rescue "#"
-        link(model_plural_name(name), url)
+        link(model_plural_name(name), url, options)
       end
     end
 
-    def new_crumb(name)
+    def new_crumb(name, options)
       new_name = "new_#{name.to_s.singularize}".to_sym
       crumb(new_name) do
         url = send("#{new_name}_path") rescue "#"
-        link(resource_name(name), url)
+        link(resource_name(name), url, options)
         parent name
       end
     end
 
-    def edit_crumb(name)
+    def edit_crumb(name, options)
       edit_name = "edit_#{name.to_s.singularize}".to_sym
       crumb(edit_name) do |resource|
         url = send(["#{edit_name}_path", "#{name}_path"].find {|m| respond_to?(m)}) rescue "#"
-        link(resource_title(resource), url, resource)
+        link(resource_title(resource), url, resource, options)
         parent name
       end 
     end
