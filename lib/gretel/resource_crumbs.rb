@@ -33,11 +33,11 @@ module Gretel
     end
 
     def model_plural_name(name)
-      name.to_s.singularize.classify.safe_constantize.try(:model_name).human(:count => :plural) rescue name
+      name.to_s.classify.safe_constantize.try(:model_name).human(:count => :plural) rescue name
     end
 
     def resource_name(name)
-      name.to_s.singularize.classify.safe_constantize.try(:model_name).try(:human) || name
+      name.to_s.classify.safe_constantize.try(:model_name).try(:human) || name
     end
 
     def resource_title(resource)
