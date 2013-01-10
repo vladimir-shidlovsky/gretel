@@ -2,6 +2,7 @@ module Gretel
   module ResourceCrumbs
 
     def resource_crumb(name, options = {}, &block)
+      options[:route_name] ||= name
       index_crumb name, options
       new_crumb name, options
       edit_crumb name, options
@@ -9,13 +10,13 @@ module Gretel
 
     def index_crumb(name, options)
       crumb(name) do
-        url = send("#{name}_path") rescue "#"
+        url = send("#{options[:route_name]}_path") rescue "#"
         link(model_plural_name(name), url, options)
       end
     end
 
     def new_crumb(name, options)
-      new_name = "new_#{name.to_s.singularize}".to_sym
+      new_name = "new_#{options[:route_name].to_s.singularize}".to_sym
       crumb(new_name) do
         url = send("#{new_name}_path") rescue "#"
         link(resource_name(name), url, options)
@@ -24,7 +25,7 @@ module Gretel
     end
 
     def edit_crumb(name, options)
-      edit_name = "edit_#{name.to_s.singularize}".to_sym
+      edit_name = "edit_#{options[:route_name].to_s.singularize}".to_sym
       crumb(edit_name) do |resource|
         url = send(["#{edit_name}_path", "#{name}_path"].find {|m| respond_to?(m)}) rescue "#"
         link(resource_title(resource), url, resource, options)
