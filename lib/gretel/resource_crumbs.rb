@@ -29,7 +29,7 @@ module Gretel
       edit_name = "edit_#{name.to_s.singularize}".to_sym
       edit_route_name = "edit_#{options[:route_name].to_s.singularize}".to_sym
       crumb(edit_name) do |resource|
-        url = send(["#{edit_route_name}_path", "#{name}_path"].find {|m| respond_to?(m)}) rescue "#"
+        url = send(["#{edit_route_name}_path", "#{name}_path"].find {|m| respond_to?(m)}, resource) rescue "#"
         link(resource_title(resource), url, resource, options)
         parent name
       end 
